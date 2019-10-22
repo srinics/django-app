@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile 
+      args:
+        http_proxy: "http://proxy-chain.intel.com:911/"
+        https_proxy: "http://proxy-chain.intel.com:911/"
+    volumes:
+      - .:/mysite
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
