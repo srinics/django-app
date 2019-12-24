@@ -6,14 +6,26 @@ DOCKER_BUILD_OPTS="--build-arg http_proxy=$HTTP_PROXY --build-arg https_proxy=$H
 HOST_PORT=9000
 CONTAINER_PORT=9000
 
-IMAGE_NAME="webapp"
-CONTAINER_NAME="webapp-image"
-DEMONIZE=$1
+IMAGE_NAME="webapp-img"
+CONTAINER_NAME="webapp-cnt"
+OP=$1
+
+
+if [ "$OP" = "d" ]; then
+	DEMONIZE=1
+elif [ "$OP" = "c" ]; then
+	CLEAN=1
+fi
 
 docker rmi $IMAGE_NAME --force
 docker image prune --force
 docker container prune --force
 docker kill $CONTAINER_NAME
+
+if [ $CLEAN ]; then
+	exit 0
+fi
+
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME . || exit
 
 if [ $DEMONIZE ]; then

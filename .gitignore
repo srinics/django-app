@@ -1,0 +1,6 @@
+db.sqlite3
+mysite/__pycache__/
+tmp/
+web-deployment.yaml
+web-service.yaml
+
