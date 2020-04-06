@@ -1,7 +1,7 @@
 #!/bin/bash
-HTTP_PROXY="http://proxy-chain.intel.com:911/"
-HTTPS_PROXY="http://proxy-chain.intel.com:911/"
-DOCKER_BUILD_OPTS="--build-arg http_proxy=$HTTP_PROXY --build-arg https_proxy=$HTTPS_PROXY"
+HTTP_PROXY="http://localproxy:12000/"
+HTTPS_PROXY="http://localproxy:12000/"
+#DOCKER_BUILD_OPTS="--build-arg http_proxy=$HTTP_PROXY --build-arg https_proxy=$HTTPS_PROXY"
 
 HOST_PORT=9000
 CONTAINER_PORT=9000
