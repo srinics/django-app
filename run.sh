@@ -6,8 +6,10 @@ HTTPS_PROXY="http://localproxy:12000/"
 HOST_PORT=9000
 CONTAINER_PORT=9000
 
-IMAGE_NAME="webapp-img"
-CONTAINER_NAME="webapp-cnt"
+REPONAME="srinics"
+
+IMAGE_NAME="$REPONAME/django-project"
+CONTAINER_NAME="django-project-cont"
 OP=$1
 
 
