@@ -8,8 +8,8 @@ CONTAINER_PORT=9000
 
 REPONAME="srinics"
 
-IMAGE_NAME="$REPONAME/django-project"
-CONTAINER_NAME="django-project-cont"
+IMAGE_NAME="django-project-img"
+CONTAINER_NAME="django-project-cnt"
 OP=$1
 
 
