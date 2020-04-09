@@ -13,9 +13,6 @@ services:
       - "9000:9000"
   db:
     image: postgres
-    volumes:
-      - ./mounts/db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: stockerize_prod
