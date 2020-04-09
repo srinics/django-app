@@ -1,4 +1,4 @@
-version: '2'
+version: '3.7'
 
 services:
   web:
@@ -7,5 +7,15 @@ services:
       dockerfile: Dockerfile 
     container_name: django-project-cnt
     image: django-project-img
+    depends_on:
+      - db
     ports:
       - "9000:9000"
+  db:
+    image: postgres
+    volumes:
+      - ./mounts/db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stockerize_prod
