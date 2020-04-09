@@ -8,6 +8,7 @@ CONTAINER_PORT=9000
 
 REPONAME="srinics"
 
+DB_IMAGE_NAME="postgres"
 IMAGE_NAME="django-project-img"
 CONTAINER_NAME="django-project-cnt"
 OP=$1
@@ -20,6 +21,7 @@ elif [ "$OP" = "c" ]; then
 fi
 
 docker rmi $IMAGE_NAME --force
+docker rmi $DB_IMAGE_NAME --force
 docker image prune --force
 docker container prune --force
 docker kill $CONTAINER_NAME
