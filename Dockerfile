@@ -1,5 +1,5 @@
 FROM centos:latest
-RUN yum install epel-release gcc python3-pip python3-devel wget -y
+RUN yum install epel-release gcc python3-pip python3-devel wget postgresql-devel -y
 RUN mkdir -p /root/srini &&  cd /root/srini
 COPY requirement.txt /root/srini
 RUN pip3 install -r /root/srini/requirement.txt
