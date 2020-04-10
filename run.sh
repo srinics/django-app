@@ -50,7 +50,7 @@ if [ $DEMONIZE ]; then
 	docker run -itd $CMD_DB || exit
 	docker run -itd $CMD_APP || exit
 else
-	docker run -it $CMD_DB || exit
+	docker run -itd $CMD_DB || exit
 	docker run -it $CMD_APP || exit
 fi
 docker ps
