@@ -4,15 +4,21 @@ services:
   web:
     build: 
       context: .
-      dockerfile: Dockerfile 
-    container_name: django-project-cnt
-    image: django-project-img
+      dockerfile: dockerfile-app
+    container_name: dproject-cnt-app
+    image: dproject-img-app
+    links:
+      - db:db
     depends_on:
       - db
     ports:
       - "9000:9000"
   db:
-    image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    env-file: db.env
+    container_name: dproject-cnt-db
+    image: dproject-img-db
+    build: 
+      context: ./temp
+      dockerfile: dockerfile-db
+    ports:
+      - "5432:5432"
