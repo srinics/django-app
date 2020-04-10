@@ -62,3 +62,5 @@ else
 	docker run -it $CMD_APP || exit
 fi
 docker ps
+curl http://127.0.0.1/index
+
