@@ -14,10 +14,10 @@ TPATH="./docker/temp/"
 ENV_FILE_DB="./docker/db.env"
 DOCKERFILE_APP="./docker/dockerfile-app"
 DOCKERFILE_DB="./docker/dockerfile-db"
-IMAGE_NAME_DB="dproject-db-img"
-IMAGE_NAME_APP="dproject-app-img"
-CONTAINER_NAME_APP="dproject-app-cnt"
-CONTAINER_NAME_DB="dproject-db-cnt"
+IMAGE_NAME_DB="dproject-img-db"
+IMAGE_NAME_APP="dproject-img-app"
+CONTAINER_NAME_APP="dproject-cnt-app"
+CONTAINER_NAME_DB="dproject-cnt-db"
 OP=$1
 
 
@@ -43,10 +43,10 @@ docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_APP -f $DOCKERFILE_APP . || exit
 
 if [ $DEMONIZE ]; then
 	docker run --name $CONTAINER_NAME_DB -p $HOST_PORT_DB:$CONTAINER_PORT_DB  -itd --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --env-file $ENV_FILE_DB $IMAGE_NAME_DB || exit
-	docker run --name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP -itd --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY $IMAGE_NAME_APP || exit
+	docker run --name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP -itd --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB $IMAGE_NAME_APP || exit
 else
 	docker run --name $CONTAINER_NAME_DB -it -p $HOST_PORT_DB:$CONTAINER_PORT_DB   --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --env-file $ENV_FILE_DB $IMAGE_NAME_DB || exit
-	docker run --name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP -it --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY $IMAGE_NAME_APP || exit
+	docker run --name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP -it --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB  $IMAGE_NAME_APP || exit
 fi
 
 docker ps
