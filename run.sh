@@ -8,8 +8,10 @@ CONTAINER_PORT=9000
 
 REPONAME="srinics"
 
-DOCKERFILE_APP="./docker/dockerfile-db"
-DOCKERFILE_DB="./docker/dockerfile-app"
+TPATH="./docker/temp/"
+
+DOCKERFILE_APP="./docker/dockerfile-app"
+DOCKERFILE_DB="./docker/dockerfile-db"
 IMAGE_NAME_DB="dproject-db-img"
 IMAGE_NAME_APP="dproject-app-img"
 CONTAINER_NAME_APP="dproject-app-cnt"
@@ -32,8 +34,8 @@ if [ $CLEAN ]; then
 	exit 0
 fi
 
-
-docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_DB -f $DOCKERFILE_DB . || exit
+set -x 
+docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_DB -f $DOCKERFILE_DB $TPATH || exit
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_APP -f $DOCKERFILE_APP . || exit
 
 if [ $DEMONIZE ]; then
