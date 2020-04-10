@@ -28,6 +28,9 @@ elif [ "$OP" = "c" ]; then
 	CLEAN=1
 fi
 
+waitport() {
+	    while ! nc -z localhost $1 ; do sleep 1 ; done
+}
 docker rmi $IMAGE_NAME_APP --force
 docker rmi $IMAGE_NAME_DB --force
 docker image prune --force
@@ -48,9 +51,11 @@ CMD_APP="--name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP $CMD_P
 
 if [ $DEMONIZE ]; then
 	docker run -itd $CMD_DB || exit
+	waitport $HOST_PORT_DB
 	docker run -itd $CMD_APP || exit
 else
 	docker run -itd $CMD_DB || exit
+	waitport $HOST_PORT_DB
 	docker run -it $CMD_APP || exit
 fi
 docker ps
