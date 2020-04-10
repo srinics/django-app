@@ -1,2 +1,1 @@
 FROM postgres:latest
-CMD postgres -c config_file=/etc/postgresql.conf

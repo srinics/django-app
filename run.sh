@@ -31,6 +31,9 @@ fi
 waitport() {
 	    while ! nc -z localhost $1 ; do sleep 1 ; done
 }
+
+docker stop $CONTAINER_NAME_DB
+docker stop $CONTAINER_NAME_APP
 docker rmi $IMAGE_NAME_APP --force
 docker rmi $IMAGE_NAME_DB --force
 docker image prune --force
