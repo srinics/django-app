@@ -32,6 +32,7 @@ docker rmi $IMAGE_NAME_APP --force
 docker rmi $IMAGE_NAME_DB --force
 docker image prune --force
 docker container prune --force
+docker kill $CONTAINER_NAME_DB
 docker kill $CONTAINER_NAME_APP
 
 if [ $CLEAN ]; then
@@ -49,7 +50,7 @@ if [ $DEMONIZE ]; then
 	docker run -itd $CMD_DB || exit
 	docker run -itd $CMD_APP || exit
 else
-	docker run -itd $CMD_DB || exit
-	docker run -itd $CMD_APP || exit
+	docker run -it $CMD_DB || exit
+	docker run -it $CMD_APP || exit
 fi
 docker ps
