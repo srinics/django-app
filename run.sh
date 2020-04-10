@@ -1,6 +1,7 @@
 #!/bin/bash
-HTTP_PROXY="http://localproxy:12000/"
-HTTPS_PROXY="http://localproxy:12000/"
+set -x 
+#HTTP_PROXY="http://localproxy:12000/"
+#HTTPS_PROXY="http://localproxy:12000/"
 #DOCKER_BUILD_OPTS="--build-arg http_proxy=$HTTP_PROXY --build-arg https_proxy=$HTTPS_PROXY"
 
 HOST_PORT_APP=9000
@@ -37,16 +38,17 @@ if [ $CLEAN ]; then
 	exit 0
 fi
 
-set -x 
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_DB -f $DOCKERFILE_DB $TPATH || exit
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_APP -f $DOCKERFILE_APP . || exit
 
-if [ $DEMONIZE ]; then
-	docker run --name $CONTAINER_NAME_DB -p $HOST_PORT_DB:$CONTAINER_PORT_DB  -itd --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --env-file $ENV_FILE_DB $IMAGE_NAME_DB || exit
-	docker run --name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP -itd --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB $IMAGE_NAME_APP || exit
-else
-	docker run --name $CONTAINER_NAME_DB -it -p $HOST_PORT_DB:$CONTAINER_PORT_DB   --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --env-file $ENV_FILE_DB $IMAGE_NAME_DB || exit
-	docker run --name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP -it --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB  $IMAGE_NAME_APP || exit
-fi
+CMD_DB="--name $CONTAINER_NAME_DB -p $HOST_PORT_DB:$CONTAINER_PORT_DB --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --env-file $ENV_FILE_DB $IMAGE_NAME_DB"
+CMD_APP="--name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP --env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB $IMAGE_NAME_APP"
 
+if [ $DEMONIZE ]; then
+	docker run -itd $CMD_DB || exit
+	docker run -itd $CMD_APP || exit
+else
+	docker run -itd $CMD_DB || exit
+	docker run -itd $CMD_APP || exit
+fi
 docker ps
