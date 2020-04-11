@@ -84,3 +84,4 @@ else
 fi
 docker ps
 
+#docker-compose -f ./docker/docker-compose.yml --project-dir=. up

@@ -4,7 +4,7 @@ services:
   web:
     build: 
       context: .
-      dockerfile: dockerfile-app
+      dockerfile: docker/dockerfile-app
     container_name: dproject-cnt-app
     image: dproject-img-app
     links:
@@ -14,11 +14,11 @@ services:
     ports:
       - "9000:9000"
   db:
-    env_file: db.env
+    env_file: docker/db.env
     container_name: dproject-cnt-db
     image: dproject-img-db
     build: 
       context: .
-      dockerfile: dockerfile-db
+      dockerfile: docker/dockerfile-db
     ports:
       - "5432:5432"
