@@ -14,11 +14,11 @@ services:
     ports:
       - "9000:9000"
   db:
-    env-file: db.env
+    env_file: db.env
     container_name: dproject-cnt-db
     image: dproject-img-db
     build: 
-      context: ./temp
+      context: .
       dockerfile: dockerfile-db
     ports:
       - "5432:5432"
