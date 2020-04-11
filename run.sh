@@ -62,5 +62,5 @@ else
 	docker run -it $CMD_APP || exit
 fi
 docker ps
-curl http://127.0.0.1/index
+curl http://127.0.0.1:$HOST_PORT_PORT/index
 
