@@ -3,7 +3,7 @@ set -x
 OP=$1
 
 if [ "$OP" = "d" ]; then
-	docker-compose -f ./docker/docker-compose.yml --project-dir=.  -d up
+	docker-compose -f ./docker/docker-compose.yml --project-dir=.  up -d 
 elif [ "$OP" = "c" ]; then
 	docker-compose -f ./docker/docker-compose.yml --project-dir=.  stop
 	docker-compose -f ./docker/docker-compose.yml --project-dir=.  kill
