@@ -26,11 +26,32 @@ if [ "$OP" = "d" ]; then
 	DEMONIZE=1
 elif [ "$OP" = "c" ]; then
 	CLEAN=1
+elif [ "$OP" = "t" ]; then
+	TEST=1
 fi
 
 waitport() {
 	    while ! nc -z localhost $1 ; do sleep 1 ; done
 }
+
+if [ $TEST ]; then
+
+	if lsof -Pi :$HOST_PORT_DB -sTCP:LISTEN -t >/dev/null ; then
+		    echo "DB is running"
+	else
+		    echo "Error: DB not running"
+		    exit 0
+	fi
+
+	if lsof -Pi :$HOST_PORT_APP -sTCP:LISTEN -t >/dev/null ; then
+		    echo "App is running"
+	else
+		    echo "Error: App not running"
+		    exit 0
+	fi
+	curl http://127.0.0.1:$HOST_PORT_APP/index
+	exit 0
+fi
 
 docker stop $CONTAINER_NAME_DB
 docker stop $CONTAINER_NAME_APP
@@ -62,5 +83,4 @@ else
 	docker run -it $CMD_APP || exit
 fi
 docker ps
-curl http://127.0.0.1:$HOST_PORT_PORT/index
 
