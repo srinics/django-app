@@ -1,9 +1,9 @@
 FROM centos:latest
-RUN yum install epel-release gcc python3-pip python3-devel wget postgresql-devel -y
+RUN yum install epel-release gcc python3-pip python3-devel wget nc postgresql-devel -y
 RUN mkdir -p /root/srini &&  cd /root/srini
 COPY requirement.txt /root/srini
 RUN pip3 install -r /root/srini/requirement.txt
 COPY . /root/srini
 RUN pip3 freeze Django
-CMD cd /root/srini/ && /usr/bin/python3  manage.py migrate && /usr/bin/python3 /root/srini/manage.py runserver 0.0.0.0:9000
+CMD while ! echo exit | nc dproject-cnt-db 5432; do sleep 10; done  && /usr/bin/python3  /root/srini/manage.py migrate && /usr/bin/python3 /root/srini/manage.py runserver 0.0.0.0:9000
 #ENTRYPOINT [ "/usr/bin/python3", "/root/srini/manage.py", "runserver", "0.0.0.0:9000"] 
