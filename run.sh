@@ -59,6 +59,8 @@ docker stop $CONTAINER_NAME_DB
 docker stop $CONTAINER_NAME_APP
 docker rmi $IMAGE_NAME_APP --force
 docker rmi $IMAGE_NAME_DB --force
+docker rmi srinics/django-project:tag2 --force
+docker rmi srinics/postgres-db:tag1 --force
 docker image prune --force
 docker container prune --force
 docker kill $CONTAINER_NAME_DB
