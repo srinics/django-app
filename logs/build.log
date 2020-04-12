@@ -1,0 +1,100 @@
++ HOST_PORT_APP=9000
++ CONTAINER_PORT_APP=9000
++ HOST_PORT_DB=5432
++ CONTAINER_PORT_DB=5432
++ REPONAME=srinics
++ TPATH=./docker/temp/
++ ENV_FILE_DB=./docker/db.env
++ DOCKERFILE_APP=./docker/dockerfile-app
++ DOCKERFILE_DB=./docker/dockerfile-db
++ IMAGE_NAME_DB=dproject-img-db
++ IMAGE_NAME_APP=dproject-img-app
++ CONTAINER_NAME_APP=dproject-cnt-app
++ CONTAINER_NAME_DB=dproject-cnt-db
++ OP=b
++ '[' b = d ']'
++ '[' b = b ']'
++ BUILD=1
++ '[' ']'
++ docker stop dproject-cnt-db
+Error response from daemon: No such container: dproject-cnt-db
++ docker stop dproject-cnt-app
+Error response from daemon: No such container: dproject-cnt-app
++ docker rmi dproject-img-app --force
+Error: No such image: dproject-img-app
++ docker rmi dproject-img-db --force
+Error: No such image: dproject-img-db
++ docker image prune --force
+Total reclaimed space: 0B
++ docker container prune --force
+Total reclaimed space: 0B
++ docker kill dproject-cnt-db
+Error response from daemon: Cannot kill container: dproject-cnt-db: No such container: dproject-cnt-db
++ docker kill dproject-cnt-app
+Error response from daemon: Cannot kill container: dproject-cnt-app: No such container: dproject-cnt-app
++ '[' ']'
++ docker build -t dproject-img-db -f ./docker/dockerfile-db ./docker/temp/
+Sending build context to Docker daemon  2.095kB
+Step 1/1 : FROM postgres:latest
+ ---> 9907cacf0c01
+Successfully built 9907cacf0c01
+Successfully tagged dproject-img-db:latest
++ docker build -t dproject-img-app -f ./docker/dockerfile-app .
+Sending build context to Docker daemon  133.6kB
+Step 1/8 : FROM centos:latest
+ ---> 470671670cac
+Step 2/8 : RUN yum install epel-release gcc python3-pip python3-devel wget nc postgresql-devel -y
+ ---> Using cache
+ ---> 813f27056a2e
+Step 3/8 : RUN mkdir -p /root/srini &&  cd /root/srini
+ ---> Using cache
+ ---> 49f457eba661
+Step 4/8 : COPY requirement.txt /root/srini
+ ---> 60dd1e6476bd
+Step 5/8 : RUN pip3 install -r /root/srini/requirement.txt
+ ---> Running in 161547d6edab
+[91mWARNING: Running pip install with root privileges is generally not a good idea. Try `pip3 install --user` instead.
+[0mCollecting django (from -r /root/srini/requirement.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/a9/4f/8a247eee2958529a6a805d38fbacd9764fd566462fa0016aa2a2947ab2a6/Django-3.0.5-py3-none-any.whl (7.5MB)
+Collecting psycopg2 (from -r /root/srini/requirement.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/a8/8f/1c5690eebf148d1d1554fc00ccf9101e134636553dbb75bdfef4f85d7647/psycopg2-2.8.5.tar.gz (380kB)
+Collecting psycopg2-binary (from -r /root/srini/requirement.txt (line 3))
+  Downloading https://files.pythonhosted.org/packages/d3/8a/a7ed55c2c55bd4f5844d72734fedc0cef8a74518a0a19105a21c15628f1e/psycopg2_binary-2.8.5-cp36-cp36m-manylinux1_x86_64.whl (2.9MB)
+Collecting sqlparse>=0.2.2 (from django->-r /root/srini/requirement.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/85/ee/6e821932f413a5c4b76be9c5936e313e4fc626b33f16e027866e1d60f588/sqlparse-0.3.1-py2.py3-none-any.whl (40kB)
+Collecting pytz (from django->-r /root/srini/requirement.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/e7/f9/f0b53f88060247251bf481fa6ea62cd0d25bf1b11a87888e53ce5b7c8ad2/pytz-2019.3-py2.py3-none-any.whl (509kB)
+Collecting asgiref~=3.2 (from django->-r /root/srini/requirement.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/68/00/25013f7310a56d17e1ab6fd885d5c1f216b7123b550d295c93f8e29d372a/asgiref-3.2.7-py2.py3-none-any.whl
+Installing collected packages: sqlparse, pytz, asgiref, django, psycopg2, psycopg2-binary
+  Running setup.py install for psycopg2: started
+    Running setup.py install for psycopg2: finished with status 'done'
+Successfully installed asgiref-3.2.7 django-3.0.5 psycopg2-2.8.5 psycopg2-binary-2.8.5 pytz-2019.3 sqlparse-0.3.1
+Removing intermediate container 161547d6edab
+ ---> eeab71aab90c
+Step 6/8 : COPY . /root/srini
+ ---> f2536d630fe9
+Step 7/8 : RUN pip3 freeze Django
+ ---> Running in f7626ead11bd
+asgiref==3.2.7
+Django==3.0.5
+gpg==1.10.0
+psycopg2==2.8.5
+psycopg2-binary==2.8.5
+pytz==2019.3
+rpm==4.14.2
+sqlparse==0.3.1
+Removing intermediate container f7626ead11bd
+ ---> fbce976f4ad4
+Step 8/8 : CMD while ! echo exit | nc dproject-cnt-db 5432; do sleep 10; done  && /usr/bin/python3  /root/srini/manage.py migrate && /usr/bin/python3 /root/srini/manage.py runserver 0.0.0.0:9000
+ ---> Running in cb148e41f0a3
+Removing intermediate container cb148e41f0a3
+ ---> 0390e9aa2256
+Successfully built 0390e9aa2256
+Successfully tagged dproject-img-app:latest
++ '[' 1 ']'
++ docker images
++ grep -e 'dproject-img-db\|dproject-img-app'
+dproject-img-app                                latest              0390e9aa2256        1 second ago        417MB
+dproject-img-db                                 latest              9907cacf0c01        11 days ago         314MB
++ exit 0
