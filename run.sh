@@ -24,6 +24,8 @@ OP=$1
 
 if [ "$OP" = "d" ]; then
 	DEMONIZE=1
+elif [ "$OP" = "b" ]; then
+	BUILD=1
 elif [ "$OP" = "c" ]; then
 	CLEAN=1
 elif [ "$OP" = "t" ]; then
@@ -69,6 +71,10 @@ fi
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_DB -f $DOCKERFILE_DB $TPATH || exit
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_APP -f $DOCKERFILE_APP . || exit
 
+if [ $BUILD ]; then
+	docker images | grep  -e  "$IMAGE_NAME_DB\|$IMAGE_NAME_APP"
+	exit 0
+fi
 #CMD_PROXY="--env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY"
 CMD_DB="--name $CONTAINER_NAME_DB -p $HOST_PORT_DB:$CONTAINER_PORT_DB $CMD_PROXY --env-file $ENV_FILE_DB $IMAGE_NAME_DB"
 CMD_APP="--name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP $CMD_PROXY --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB $IMAGE_NAME_APP"
