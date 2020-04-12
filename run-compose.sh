@@ -1,6 +1,6 @@
 #!/bin/bash
 set -x
-OP="i"
+OP="$1"
 HUB=$2
 
 if [ $HUB = "h" ]; then
@@ -20,7 +20,7 @@ elif [ "$OP" = "t" ]; then
  	curl http://localhost:9000/index	
 fi
 
-if [ "$OP" = "i" ]; then
+if [ -z "$OP" ]; then
 	docker-compose -f $compose_file --project-dir=.  up
 fi
 exit 0

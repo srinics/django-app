@@ -1,0 +1,21 @@
++ OP=d
++ HUB=h
++ '[' h = h ']'
++ compose_file=./docker/docker-compose-global.yml
++ '[' d = d ']'
++ docker-compose -f ./docker/docker-compose-global.yml --project-dir=. up -d
+Creating network "djangoapp_default" with the default driver
+Pulling db (srinics/postgres-db:tag1)...
+tag1: Pulling from srinics/postgres-db
+Digest: sha256:f057eb154407cdfce8881a12581e5cde47b591698fc9e0d1bfa95eefb71a2378
+Status: Downloaded newer image for srinics/postgres-db:tag1
+Pulling web (srinics/django-project:tag2)...
+tag2: Pulling from srinics/django-project
+Digest: sha256:2626193f3947a031837dde83acd476a43cebe493f7442e72633c51c80f0e7caf
+Status: Downloaded newer image for srinics/django-project:tag2
+Creating dproject-cnt-db ... 
+Creating dproject-cnt-db
+[1A[2KCreating dproject-cnt-db ... [32mdone[0m[1BCreating dproject-cnt-app ... 
+Creating dproject-cnt-app
+[1A[2KCreating dproject-cnt-app ... [32mdone[0m[1B+ '[' -z d ']'
++ exit 0
