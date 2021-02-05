@@ -7,12 +7,13 @@ services:
       dockerfile: docker/dockerfile-app
     container_name: dproject-cnt-app
     image: dproject-img-app
-    links:
-      - db:db
     depends_on:
       - db
     ports:
       - "9000:9000"
+    networks:
+      - mynetwork
+
   db:
     env_file: docker/db.env
     container_name: dproject-cnt-db
@@ -22,3 +23,10 @@ services:
       dockerfile: docker/dockerfile-db
     ports:
       - "5432:5432"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+         
