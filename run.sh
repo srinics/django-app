@@ -19,6 +19,7 @@ IMAGE_NAME_DB="dproject-img-db"
 IMAGE_NAME_APP="dproject-img-app"
 CONTAINER_NAME_APP="dproject-cnt-app"
 CONTAINER_NAME_DB="dproject-cnt-db"
+NET_NAME="mynet"
 OP=$1
 
 
@@ -55,6 +56,7 @@ if [ $TEST ]; then
 	exit 0
 fi
 
+if [ $CLEAN ]; then
 docker stop $CONTAINER_NAME_DB
 docker stop $CONTAINER_NAME_APP
 docker rmi $IMAGE_NAME_APP --force
@@ -65,11 +67,13 @@ docker image prune --force
 docker container prune --force
 docker kill $CONTAINER_NAME_DB
 docker kill $CONTAINER_NAME_APP
+fi
 
 if [ $CLEAN ]; then
 	exit 0
 fi
 
+docker network create $NET_NAME
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_DB -f $DOCKERFILE_DB $TPATH || exit
 docker build $DOCKER_BUILD_OPTS -t $IMAGE_NAME_APP -f $DOCKERFILE_APP . || exit
 
@@ -78,8 +82,9 @@ if [ $BUILD ]; then
 	exit 0
 fi
 #CMD_PROXY="--env http_proxy=$HTTP_PROXY --env https_proxy=$HTTPS_PROXY"
-CMD_DB="--name $CONTAINER_NAME_DB -p $HOST_PORT_DB:$CONTAINER_PORT_DB $CMD_PROXY --env-file $ENV_FILE_DB $IMAGE_NAME_DB"
-CMD_APP="--name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP $CMD_PROXY --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB $IMAGE_NAME_APP"
+CMD_DB="--name $CONTAINER_NAME_DB -p $HOST_PORT_DB:$CONTAINER_PORT_DB $CMD_PROXY --env-file $ENV_FILE_DB --network $NET_NAME $IMAGE_NAME_DB"
+#CMD_APP="--name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP $CMD_PROXY --network $NET_NAME --link $CONTAINER_NAME_DB:$CONTAINER_NAME_DB $IMAGE_NAME_APP"
+CMD_APP="--name $CONTAINER_NAME_APP -p $HOST_PORT_APP:$CONTAINER_PORT_APP $CMD_PROXY --network $NET_NAME $IMAGE_NAME_APP"
 
 if [ $DEMONIZE ]; then
 	docker run -itd $CMD_DB || exit
