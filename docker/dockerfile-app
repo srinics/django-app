@@ -5,5 +5,5 @@ COPY requirement.txt /root/srini
 RUN pip3 install -r /root/srini/requirement.txt
 COPY . /root/srini
 RUN pip3 freeze Django
-CMD while ! echo exit | nc dproject-cnt-db 5432; do sleep 10; done  && /usr/bin/python3  /root/srini/manage.py migrate && /usr/bin/python3 /root/srini/manage.py runserver 0.0.0.0:9000
+CMD while ! echo exit | nc dproject-cnt-db 5432; do sleep 10; done  && /usr/bin/python3  /root/srini/manage.py migrate && /usr/bin/python3 /root/srini/manage.py runserver 0.0.0.0:9090
 #ENTRYPOINT [ "/usr/bin/python3", "/root/srini/manage.py", "runserver", "0.0.0.0:9000"] 

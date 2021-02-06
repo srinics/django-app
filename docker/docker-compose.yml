@@ -10,7 +10,7 @@ services:
     depends_on:
       - db
     ports:
-      - "9000:9000"
+      - "38080:9090"
     networks:
       - mynetwork
 

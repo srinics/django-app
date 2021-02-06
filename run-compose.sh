@@ -3,11 +3,7 @@ set -x
 OP="$1"
 HUB=$2
 
-if [ $HUB = "h" ]; then
-	compose_file="./docker/docker-compose-global.yml"
-else
-	compose_file="./docker/docker-compose.yml"
-fi
+compose_file="./docker/docker-compose.yml"
 
 if [ "$OP" = "d" ]; then
 	docker-compose -f $compose_file --project-dir=.  up -d 
@@ -17,7 +13,7 @@ elif [ "$OP" = "c" ]; then
 	docker-compose -f $compose_file --project-dir=.  stop
 	docker-compose -f $compose_file --project-dir=.  kill
 elif [ "$OP" = "t" ]; then
- 	curl http://localhost:9000/index	
+ 	curl http://localhost:9090/index	
 fi
 
 if [ -z "$OP" ]; then
